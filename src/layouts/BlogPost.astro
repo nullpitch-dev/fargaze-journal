@@ -69,6 +69,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				margin-top: 3rem;
 				padding-top: 1.5rem;
 				border-top: 0.5px solid #eee;
+				width: 100%;
+				max-width: 100%;
+				overflow: hidden;
+			}
+
+			#cusdis_thread {
+				width: 100%;
+				max-width: 100%;
+			}
+
+			#cusdis_thread iframe {
+				width: 100% !important;
+				max-width: 100% !important;
 			}
 		</style>
 	</head>
@@ -94,21 +107,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				<slot />
 			</div>
 			<div class="comments">
-				<script src="https://giscus.app/client.js"
-					data-repo="nullpitch-dev/fargaze-journal"
-					data-repo-id="R_kgDOR_WPjQ"
-					data-category="Announcements"
-					data-category-id="DIC_kwDOR_WPjc4C6n7K"
-					data-mapping="pathname"
-					data-strict="0"
-					data-reactions-enabled="1"
-					data-emit-metadata="0"
-					data-input-position="bottom"
-					data-theme="noborder_light"
-					data-lang="en"
-					crossorigin="anonymous"
-					async>
-				</script>
+				<div id="cusdis_thread"
+					data-host="https://cusdis.com"
+					data-app-id="784d6d11-94e6-4e0c-8673-dd3bc5d6adb5"
+					data-page-id={Astro.url.pathname}
+					data-page-url={Astro.url.href}
+					data-page-title={title}
+					data-style="https://journal.fargaze.co/cusdis-custom.css"
+				></div>
+				<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 			</div>
 		</main>
 		<Footer />
