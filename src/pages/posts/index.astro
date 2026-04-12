@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -11,103 +10,74 @@ const posts = (await getCollection('posts')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
-
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			main {
-				width: 960px;
+				max-width: 680px;
+				margin: 0 auto;
+				padding: 0 1.5rem;
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
+			.section-label {
+				font-size: 0.7rem;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				color: #bbb;
 				margin-bottom: 1rem;
-				text-align: center;
 			}
-			ul li:first-child img {
-				width: 100%;
+			.post-list { list-style: none; padding: 0; margin: 0; }
+			.post-item {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: baseline;
+				padding: 1rem 0;
+				border-bottom: 0.5px solid #eee;
+				gap: 1rem;
 			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+			.post-title {
+				font-size: 0.95rem !important;
+				font-weight: 500;
+				color: #111;
+				text-decoration: none;
+				flex: 1;
 			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
+			.post-title:hover { color: #555; }
+			.post-meta {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 8px;
+				flex-shrink: 0;
 			}
-			ul li a {
-				display: block;
+			.post-tag {
+				font-size: 0.7rem !important;
+				color: #bbb;
 			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+			.post-date {
+				font-size: 0.75rem !important;
+				color: #bbb;
+				white-space: nowrap;
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/posts/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+			<p class="section-label">All posts</p>
+			<ul class="post-list">
+				{posts.map((post) => (
+					<li class="post-item">
+						<a class="post-title" href={`/posts/${post.id}/`}>{post.data.title}</a>
+						<div class="post-meta">
+							{post.data.tags && <span class="post-tag">{post.data.tags[0]}</span>}
+							<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+						</div>
+					</li>
+				))}
+			</ul>
 		</main>
 		<Footer />
 	</body>

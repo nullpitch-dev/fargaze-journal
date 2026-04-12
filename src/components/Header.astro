@@ -5,14 +5,57 @@ import { SITE_TITLE } from '../consts';
 	<nav>
 		<div class="brand">
 			<a href="/">{SITE_TITLE}</a>
-			<span class="tagline">Life in the UK — golf, food, travel & more</span>
+			<span class="tagline">Books, life in the UK, golf, food & travel</span>
 		</div>
 		<div class="nav-links">
 			<a href="/posts/">Posts</a>
 			<a href="/about">About</a>
+			<button class="search-toggle" id="search-toggle" aria-label="Search">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8"></circle>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+				</svg>
+			</button>
 		</div>
 	</nav>
 </header>
+
+<div class="search-overlay" id="search-overlay">
+	<div class="search-box">
+		<div id="search"></div>
+		<button class="close-search" id="close-search">Close</button>
+	</div>
+</div>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script>
+	const toggle = document.getElementById('search-toggle');
+	const overlay = document.getElementById('search-overlay');
+	const close = document.getElementById('close-search');
+	let initialized = false;
+
+	toggle.addEventListener('click', () => {
+		overlay.style.display = 'flex';
+		if (!initialized) {
+			new PagefindUI({ element: '#search', showImages: false });
+			initialized = true;
+		}
+		setTimeout(() => {
+			const input = overlay.querySelector('input');
+			if (input) input.focus();
+		}, 100);
+	});
+
+	close.addEventListener('click', () => {
+		overlay.style.display = 'none';
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') overlay.style.display = 'none';
+	});
+</script>
+
 <style>
 	header {
 		border-bottom: 0.5px solid #e5e5e5;
@@ -40,6 +83,7 @@ import { SITE_TITLE } from '../consts';
 	}
 	.nav-links {
 		display: flex;
+		align-items: center;
 		gap: 1.5rem;
 	}
 	.nav-links a {
@@ -47,7 +91,45 @@ import { SITE_TITLE } from '../consts';
 		color: #888;
 		text-decoration: none;
 	}
-	.nav-links a:hover {
-		color: #111;
+	.nav-links a:hover { color: #111; }
+	.search-toggle {
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: #888;
+		padding: 0;
+		display: flex;
+		align-items: center;
 	}
+	.search-toggle:hover { color: #111; }
+	.search-overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.5);
+		z-index: 1000;
+		align-items: flex-start;
+		justify-content: center;
+		padding-top: 10vh;
+	}
+	.search-box {
+		background: white;
+		border-radius: 8px;
+		padding: 1.5rem;
+		width: 90%;
+		max-width: 600px;
+	}
+	.close-search {
+		margin-top: 1rem;
+		font-size: 0.8rem;
+		color: #888;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+	}
+	.close-search:hover { color: #111; }
 </style>
