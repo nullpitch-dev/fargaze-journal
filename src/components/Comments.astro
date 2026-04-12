@@ -1,0 +1,162 @@
+---
+const { pageId } = Astro.props;
+import { supabase } from '../lib/supabase';
+
+const { data: comments } = await supabase
+	.from('comments')
+	.select('*')
+	.eq('page_id', pageId)
+	.order('created_at', { ascending: true });
+---
+
+<div class="comments">
+	<h3>Comments</h3>
+
+	<div class="comment-list">
+		{comments && comments.length > 0 ? (
+			comments.map((comment) => (
+				<div class="comment">
+					<div class="comment-header">
+						<span class="comment-name">{comment.name}</span>
+						<span class="comment-date">
+							{new Date(comment.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}
+						</span>
+					</div>
+					<p class="comment-content">{comment.content}</p>
+				</div>
+			))
+		) : (
+			<p class="no-comments">No comments yet. Be the first!</p>
+		)}
+	</div>
+
+	<form class="comment-form" id="comment-form">
+		<input type="hidden" id="page-id" value={pageId} />
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" id="name" placeholder="Your name" required />
+		</div>
+		<div class="form-group">
+			<label for="content">Comment</label>
+			<textarea id="content" rows="4" placeholder="Write a comment..." required></textarea>
+		</div>
+		<button type="submit">Post comment</button>
+		<p class="success-msg" id="success-msg" style="display:none">Comment posted!</p>
+	</form>
+</div>
+
+<script>
+	import { supabase } from '../lib/supabase';
+
+	const form = document.getElementById('comment-form') as HTMLFormElement;
+	const successMsg = document.getElementById('success-msg') as HTMLParagraphElement;
+
+	form.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const pageId = (document.getElementById('page-id') as HTMLInputElement).value;
+		const name = (document.getElementById('name') as HTMLInputElement).value.trim();
+		const content = (document.getElementById('content') as HTMLTextAreaElement).value.trim();
+
+		if (!name || !content) return;
+
+		const { error } = await supabase.from('comments').insert({ page_id: pageId, name, content });
+
+		if (!error) {
+			form.reset();
+			successMsg.style.display = 'block';
+			setTimeout(() => location.reload(), 1000);
+		}
+	});
+</script>
+
+<style>
+	.comments {
+		margin-top: 3rem;
+		padding-top: 1.5rem;
+		border-top: 0.5px solid #eee;
+	}
+	h3 {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: #111;
+		margin-bottom: 1.5rem;
+	}
+	.comment {
+		padding: 1rem 0;
+		border-bottom: 0.5px solid #eee;
+	}
+	.comment-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-bottom: 0.4rem;
+	}
+	.comment-name {
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: #111;
+	}
+	.comment-date {
+		font-size: 0.75rem;
+		color: #bbb;
+	}
+	.comment-content {
+		font-size: 0.85rem;
+		color: #444;
+		line-height: 1.6;
+		margin: 0;
+	}
+	.no-comments {
+		font-size: 0.85rem;
+		color: #bbb;
+		margin-bottom: 1.5rem;
+	}
+	.comment-form {
+		margin-top: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	label {
+		font-size: 0.75rem;
+		color: #888;
+	}
+	input, textarea {
+		font-size: 0.85rem;
+		padding: 8px 10px;
+		border: 0.5px solid #ddd;
+		border-radius: 6px;
+		outline: none;
+		font-family: inherit;
+		color: #111;
+		width: 100%;
+	}
+	input:focus, textarea:focus {
+		border-color: #aaa;
+	}
+	textarea {
+		resize: vertical;
+	}
+	button {
+		font-size: 0.8rem;
+		padding: 8px 16px;
+		background: #111;
+		color: white;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		align-self: flex-start;
+	}
+	button:hover {
+		background: #333;
+	}
+	.success-msg {
+		font-size: 0.8rem;
+		color: #888;
+	}
+</style>
