@@ -74,6 +74,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				max-width: 100%;
 				overflow: hidden;
 			}
+			.post-desc {
+				font-size: 0.9rem;
+				color: #888;
+				margin: 0.25rem 0 0.5rem 0;
+				line-height: 1.5;
+			}
 		</style>
 	</head>
 	<body>
@@ -87,6 +93,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			)}
 			<div class="post-header">
 				<h1>{title}</h1>
+				{description && <p class="post-desc">{description}</p>}
 				<div class="date">
 					<FormattedDate date={pubDate} />
 					{updatedDate && (
