@@ -79,9 +79,19 @@ p {
 }
 .prose p {
 	margin-bottom: 2em;
+	font-size: 1.05em;
+	line-height: 1.6;
 }
 .prose li p {
-    margin-bottom: 0 !important;
+	margin-bottom: 0 !important;
+	margin-top: 0 !important;
+}
+.prose li {
+	font-size: 1.0rem;
+	margin-bottom: 0.35rem !important;
+}
+.prose blockquote {
+	font-size: 1.0rem;
 }
 textarea {
 	width: 100%;
