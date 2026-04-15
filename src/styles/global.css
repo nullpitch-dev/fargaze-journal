@@ -31,7 +31,7 @@ body {
 	overflow-x: hidden;
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
-	line-height: 1.7;
+	line-height: 1.2;
 }
 main {
 	width: 100%;
@@ -80,21 +80,31 @@ p {
 .prose p {
 	margin-bottom: 2em;
 	font-size: 1.05em;
-	line-height: 1.6;
+	line-height: 1.2;
 }
 .prose li p {
-	margin-bottom: 0 !important;
+	margin-bottom: 0.7rem !important;
 	margin-top: 0 !important;
+	line-height: 1.6;
 }
 .prose li {
 	font-size: 1.0rem;
 	margin-bottom: 0.35rem !important;
-}
-.prose blockquote {
-	font-size: 1.0rem;
+	margin-top: 0 !important;
 }
 .prose ul, .prose ol {
     padding-left: 1.2rem;
+    margin-bottom: 0.2rem !important;
+}
+.prose ul ul li, .prose ol ol li {
+    margin-bottom: 0.15rem !important;
+	 margin-top: 0 !important;
+}
+.prose ul ul ul li, .prose ol ol ol li {
+	margin-bottom: 0.0rem !important;
+}
+.prose blockquote {
+	font-size: 1.0rem;
 }
 textarea {
 	width: 100%;
@@ -130,7 +140,7 @@ blockquote {
         font-size: 1em;
         font-style: italic;
         color: #555;
-		line-height: 1.5;
+		line-height: 1.3;
 }
 blockquote p {
         margin: 0 0 1.5rem 0;
