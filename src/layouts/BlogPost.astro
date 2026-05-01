@@ -110,7 +110,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Footer />
 
     <script>
-      const slug = document.querySelector('meta[name="post-slug"]')?.getAttribute('content');
+      const raw = document.querySelector('meta[name="post-slug"]')?.getAttribute('content');
+      const slug = raw ? decodeURIComponent(raw) : null;
+      console.log('slug:', slug);
       if (slug) {
         fetch('/api/views', {
           method: 'POST',
