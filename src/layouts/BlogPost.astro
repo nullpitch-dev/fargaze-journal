@@ -12,6 +12,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
+    <meta name="post-slug" content={Astro.url.pathname} />
 		<style>
 			main {
 				max-width: 680px;
@@ -107,5 +108,17 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			<Comments pageId={Astro.url.pathname} />
 		</main>
 		<Footer />
+
+    <script>
+      const slug = document.querySelector('meta[name="post-slug"]')?.getAttribute('content');
+      if (slug) {
+        fetch('/api/views', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug }),
+        });
+      }
+    </script>
+
 	</body>
 </html>
