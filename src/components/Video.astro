@@ -1,0 +1,11 @@
+---
+const { id, title = "Video" } = Astro.props;
+---
+<iframe
+  width="100%"
+  style="aspect-ratio: 16/9;"
+  src={`https://www.youtube.com/embed/${id}`}
+  title={title}
+  frameborder="0"
+  allowfullscreen
+/>
