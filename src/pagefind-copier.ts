@@ -7,7 +7,7 @@ export function pagefindCopier(): AstroIntegration {
     name: "pagefind-copier",
     hooks: {
       "astro:build:done": async () => {
-        const pagefindSourceDir = path.join("./dist", "pagefind");
+				const pagefindSourceDir = path.join("./dist/client", "pagefind");
         const pagefindDestDir = path.join("./.vercel/output/static", "pagefind");
 
         await fs.mkdir(pagefindDestDir, { recursive: true });
