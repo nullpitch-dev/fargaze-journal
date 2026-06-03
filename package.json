@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-		"build": "astro build && npx pagefind --site dist && node src/copy-pagefind.mjs",
+		"build": "astro build && npx pagefind --site dist/client && node src/copy-pagefind.mjs",
 		"preview": "astro preview",
     "astro": "astro"
   },

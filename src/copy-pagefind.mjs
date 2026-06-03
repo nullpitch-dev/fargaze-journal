@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
 
-const src = "./dist/pagefind";
+const src = "./dist/client/pagefind";
 const dest = "./.vercel/output/static/pagefind";
 
 async function copyDir(src, dest) {
