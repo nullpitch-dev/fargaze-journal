@@ -6,10 +6,12 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 import vercel from '@astrojs/vercel';
 
+import { pagefindCopier } from './src/pagefind-copier';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://journal.fargaze.co',
-  integrations: [mdx(), sitemap()],
+	integrations: [mdx(), sitemap(), pagefindCopier()],
 
   fonts: [
       {
