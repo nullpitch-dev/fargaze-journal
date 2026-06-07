@@ -96,32 +96,32 @@ const { pageId } = Astro.props;
 		color: #111;
 		margin-bottom: 1.5rem;
 	}
-	.comment {
+	.comments :global(.comment) {
 		padding: 1rem 0;
 		border-bottom: 0.5px solid #eee;
 	}
-	.comment-header {
+	.comments :global(.comment-header) {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
 		margin-bottom: 0.4rem;
 	}
-	.comment-name {
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: #111;
+	.comments :global(.comment-name) {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #333;
 	}
-	.comment-date {
-		font-size: 0.75rem;
+	.comments :global(.comment-date) {
+		font-size: 0.8rem;
 		color: #bbb;
 	}
-	.comment-content {
-		font-size: 0.85rem;
-		color: #444;
-		line-height: 1.6;
+	.comments :global(.comment-content) {
+		font-size: 0.95rem;
+		color: #333;
+		line-height: 1.8;
 		margin: 0;
 	}
-	.no-comments {
+	.comments :global(.no-comments) {
 		font-size: 0.85rem;
 		color: #bbb;
 		margin-bottom: 1.5rem;
