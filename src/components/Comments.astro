@@ -2,10 +2,12 @@
 const { pageId } = Astro.props;
 import { supabase } from '../lib/supabase';
 
+const decodedPageId = decodeURIComponent(pageId);
+
 const { data: comments } = await supabase
 	.from('comments')
 	.select('*')
-	.eq('page_id', pageId)
+	.eq('page_id', decodedPageId)
 	.order('created_at', { ascending: true });
 ---
 
@@ -31,7 +33,7 @@ const { data: comments } = await supabase
 	</div>
 
 	<form class="comment-form" id="comment-form">
-		<input type="hidden" id="page-id" value={pageId} />
+		<input type="hidden" id="page-id" value={decodeURIComponent(pageId)} />
 		<div class="form-group">
 			<label for="name">Name</label>
 			<input type="text" id="name" placeholder="Your name" required />
