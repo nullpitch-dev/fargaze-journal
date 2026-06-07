@@ -1,39 +1,14 @@
 ---
 const { pageId } = Astro.props;
-import { supabase } from '../lib/supabase';
-
-const decodedPageId = decodeURIComponent(pageId);
-
-const { data: comments } = await supabase
-	.from('comments')
-	.select('*')
-	.eq('page_id', decodedPageId)
-	.order('created_at', { ascending: true });
 ---
 
 <div class="comments">
 	<h3>Comments</h3>
-
-	<div class="comment-list">
-		{comments && comments.length > 0 ? (
-			comments.map((comment) => (
-				<div class="comment">
-					<div class="comment-header">
-						<span class="comment-name">{comment.name}</span>
-						<span class="comment-date">
-							{new Date(comment.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}
-						</span>
-					</div>
-					<p class="comment-content">{comment.content}</p>
-				</div>
-			))
-		) : (
-			<p class="no-comments">No comments yet. Be the first!</p>
-		)}
+	<div class="comment-list" id="comment-list">
+		<p class="no-comments">Loading comments…</p>
 	</div>
 
 	<form class="comment-form" id="comment-form">
-		<input type="hidden" id="page-id" value={decodeURIComponent(pageId)} />
 		<div class="form-group">
 			<label for="name">Name</label>
 			<input type="text" id="name" placeholder="Your name" required />
@@ -50,25 +25,63 @@ const { data: comments } = await supabase
 <script>
 	import { supabase } from '../lib/supabase';
 
+	const pageId = decodeURIComponent(location.pathname).normalize('NFC');
+	const list = document.getElementById('comment-list')!;
 	const form = document.getElementById('comment-form') as HTMLFormElement;
 	const successMsg = document.getElementById('success-msg') as HTMLParagraphElement;
 
+	function escapeHtml(s: string) {
+		return s.replace(/[&<>"']/g, (c) =>
+			({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!)
+		);
+	}
+
+	async function loadComments() {
+		const { data: comments, error } = await supabase
+			.from('comments')
+			.select('*')
+			.eq('page_id', pageId)
+			.order('created_at', { ascending: true });
+
+		if (error) {
+			list.innerHTML = '<p class="no-comments">Could not load comments.</p>';
+			return;
+		}
+		if (!comments || comments.length === 0) {
+			list.innerHTML = '<p class="no-comments">No comments yet. Be the first!</p>';
+			return;
+		}
+		list.innerHTML = comments.map((c) => {
+			const date = new Date(c.created_at).toLocaleDateString('en-GB', {
+				year: 'numeric', month: 'short', day: 'numeric',
+			});
+			return `
+				<div class="comment">
+					<div class="comment-header">
+						<span class="comment-name">${escapeHtml(c.name)}</span>
+						<span class="comment-date">${date}</span>
+					</div>
+					<p class="comment-content">${escapeHtml(c.content)}</p>
+				</div>`;
+		}).join('');
+	}
+
 	form.addEventListener('submit', async (e) => {
 		e.preventDefault();
-		const pageId = (document.getElementById('page-id') as HTMLInputElement).value;
 		const name = (document.getElementById('name') as HTMLInputElement).value.trim();
 		const content = (document.getElementById('content') as HTMLTextAreaElement).value.trim();
-
 		if (!name || !content) return;
 
 		const { error } = await supabase.from('comments').insert({ page_id: pageId, name, content });
-
 		if (!error) {
 			form.reset();
 			successMsg.style.display = 'block';
-			setTimeout(() => location.reload(), 1000);
+			await loadComments();
+			setTimeout(() => { successMsg.style.display = 'none'; }, 2000);
 		}
 	});
+
+	loadComments();
 </script>
 
 <style>
