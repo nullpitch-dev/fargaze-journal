@@ -122,6 +122,33 @@ p {
 	vertical-align: top;
 	margin-bottom: 0.2rem;
 }
+/* heading 자체의 상하 여백 */
+.prose h2,
+.prose h3,
+.prose h4 {
+	margin-top: 1.8rem;
+	margin-bottom: 0.4rem;
+}
+
+/* heading 바로 다음에 오는 리스트 — 위쪽 간격 제거 */
+.prose h2 + ul, .prose h2 + ol,
+.prose h3 + ul, .prose h3 + ol,
+.prose h4 + ul, .prose h4 + ol {
+	margin-top: 0.8rem;
+}
+
+/* 리스트 바로 다음에 오는 heading — 위쪽 간격 확보 */
+.prose ul + h2, .prose ol + h2,
+.prose ul + h3, .prose ol + h3,
+.prose ul + h4, .prose ol + h4 {
+	margin-top: 1.5rem;
+}
+
+/* heading이 연달아 나올 때는 좁게 */
+.prose h2 + h3, .prose h3 + h4,
+.prose h2 + h2, .prose h3 + h3, .prose h4 + h4 {
+	margin-top: 1rem;
+}
 textarea {
 	width: 100%;
 	font-size: 16px;
